@@ -21,7 +21,7 @@ public class CompareImage {
 	private HashMap<String, int[][]> imageRGB = new HashMap<String, int[][]>();
 
 	public CompareImage(String uploadedImage, double accuracy, Settings appSettings) {
-		if (uploadedImage != null) {
+		if (uploadedImage != null && uploadedImage != "") {
 			this.databasePath = appSettings.getDatabasePath();
 			this.resultsPath = appSettings.getResultsPath();
 			this.cleanResultsFolder = appSettings.getCleanResultsFolder();

@@ -19,13 +19,13 @@ public class EdgeExtraction {
 		BufferedImage edges = null;
 
 		if (img != null) {
-			rawImage = PicImage.greyScaleArray(img);
+			rawImage = PicImage.getGreyScaleArray(img);
 			maskX = Sobel.Horizontal(rawImage);
 			maskY = Sobel.Vertical(rawImage);
 
 			Magnitude();
 
-			edges = PicImage.greyScaleImage(Hysteresis());
+			edges = PicImage.getGreyScaleImage(Hysteresis());
 		}
 
 		return edges;

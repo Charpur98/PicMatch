@@ -1,5 +1,7 @@
 package PicMatch;
 
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -7,6 +9,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.DirectoryDialog;
 
@@ -74,7 +77,7 @@ public class SettingsScreen {
 		btnChangeDatabase.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String newDbPath = changeFileDirectory();
+				String newDbPath = changeDBFileDirectory();
 				if (newDbPath != null) {
 					lblDirectoryPath.setText(newDbPath);
 					databasePath = newDbPath;
@@ -88,9 +91,9 @@ public class SettingsScreen {
 		btnChangeResults.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String newResultsPath = changeFileDirectory();
+				String newResultsPath = changeResultsFileDirectory();
 				if (newResultsPath != null) {
-					lblResultsPath.setText(resultsPath);
+					lblResultsPath.setText(newResultsPath);
 					resultsPath = newResultsPath;
 				}
 			}
@@ -132,8 +135,8 @@ public class SettingsScreen {
 
 		Label lblEdgeExtraction = new Label(shell, SWT.NONE);
 		lblEdgeExtraction.setBounds(10, 155, 175, 16);
-		lblEdgeExtraction.setText("Use Edge Extraction (2.5x slower)");	
-		
+		lblEdgeExtraction.setText("Use Edge Extraction (2.5x slower)");
+
 		Button btnHistComparison = new Button(shell, SWT.CHECK);
 		btnHistComparison.setBounds(190, 175, 25, 16);
 		btnHistComparison.setSelection(histComparison);
@@ -189,14 +192,46 @@ public class SettingsScreen {
 		});
 	}
 
-	private String changeFileDirectory() {
+	private String changeDBFileDirectory() {
 		try {
 			DirectoryDialog dialog = new DirectoryDialog(shell);
 			dialog.setFilterPath("ImageDatabase");
-			return dialog.open();
+			String newPath = dialog.open();
+			if (isValidDatabase(newPath) == true) {
+				return newPath;
+			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		MessageBox dialog = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
+		dialog.setText("ERROR");
+		dialog.setMessage("You have not selected a valid database.");
+		dialog.open();
 		return null;
+	}
+
+	private String changeResultsFileDirectory() {
+		try {
+			DirectoryDialog dialog = new DirectoryDialog(shell);
+			dialog.setFilterPath("Results");
+			String newPath = dialog.open();
+			return newPath;
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		MessageBox dialog = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
+		dialog.setText("ERROR");
+		dialog.setMessage("You have not selected a valid folder.");
+		dialog.open();
+		return null;
+	}
+
+	private boolean isValidDatabase(String folderPath) {
+		File[] fileArray = new File(folderPath).listFiles();
+		if (fileArray.length == 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

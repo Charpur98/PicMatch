@@ -9,11 +9,11 @@ public class Settings {
 	private Boolean histComparison;
 	private Boolean perfData;
 
-	public Settings(String databasePath, String resultsPath, Boolean cleanResultsFolder, Boolean edgeExtractoion, Boolean histComparison) {
+	public Settings(String databasePath, String resultsPath, Boolean cleanResultsFolder, Boolean edgeExtraction, Boolean histComparison) {
 		this.databasePath = databasePath;
 		this.resultsPath = resultsPath;
 		this.setCleanResultsFolder(cleanResultsFolder);
-		this.setEdgeExtraction(edgeExtractoion);
+		this.setEdgeExtraction(edgeExtraction);
 		this.setHistComparison(histComparison);
 		this.perfData = false;
 	}

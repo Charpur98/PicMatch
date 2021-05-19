@@ -31,7 +31,7 @@ class CompareImageTest {
 	}
 
 	@Test
-	final void testCleanResultsFolderTrue() {
+	final void testCleanResultsFolder_True() {
 		String imagePath = "ImageDatabase\\F1-Cars\\F1-Cars010.jpg";
 		Settings appSettings = new Settings("ImageDatabase\\F1-Cars", "ImageDatabase\\Results", true, false, false);
 		CompareImage compareImage = new CompareImage(imagePath, 80, appSettings);
@@ -59,7 +59,7 @@ class CompareImageTest {
 	}
 
 	@Test
-	final void testCleanResultsFolderFalse() {
+	final void testCleanResultsFolder_False() {
 		String imagePath = "ImageDatabase\\F1-Cars\\F1-Cars010.jpg";
 		Settings appSettings = new Settings("ImageDatabase\\F1-Cars", "ImageDatabase\\Results", false, false, false);
 		new CompareImage(imagePath, 80, appSettings);
@@ -104,7 +104,7 @@ class CompareImageTest {
 	}
 
 	@Test
-	final void testWriteImageFolderDoesnotExist() {
+	final void testWriteImage_FolderDoesnotExist() {
 		String imagePath = "ImageDatabase\\F1-Cars\\F1-Cars010.jpg";
 		Settings appSettings = new Settings("", "ImageDatabase\\Results", true, false, false);
 		CompareImage compareImage = new CompareImage(imagePath, 80, appSettings);
@@ -126,7 +126,7 @@ class CompareImageTest {
 	}
 
 	@Test
-	final void testWriteImageAlreadyExists() {
+	final void testWriteImage_AlreadyExists() {
 		String imagePath = "ImageDatabase\\F1-Cars\\F1-Cars010.jpg";
 		Settings appSettings = new Settings("", "ImageDatabase\\Results", true, false, false);
 		CompareImage compareImage = new CompareImage(imagePath, 80, appSettings);
@@ -146,7 +146,7 @@ class CompareImageTest {
 	}
 
 	@Test
-	final void testCompareImagePixelsEqual() {
+	final void testCompareImage_PixelsEqual() {
 		String imagePath = null;
 		Settings appSettings = new Settings("", "ImageDatabase\\Results", true, false, false);
 		CompareImage compareImage = new CompareImage(imagePath, 80, appSettings);
@@ -167,7 +167,7 @@ class CompareImageTest {
 	}
 
 	@Test
-	final void testCompareImagePixelsWithinRange() {
+	final void testCompareImage_PixelsWithinRange() {
 		String imagePath = null;
 		Settings appSettings = new Settings("", "ImageDatabase\\Results", true, false, false);
 		CompareImage compareImage = new CompareImage(imagePath, 80, appSettings);
@@ -191,7 +191,7 @@ class CompareImageTest {
 	}
 
 	@Test
-	final void testCompareImagePixelsOutOfRange() {
+	final void testCompareImage_PixelsOutOfRange() {
 		String imagePath = null;
 		Settings appSettings = new Settings("", "ImageDatabase\\Results", true, false, false);
 		CompareImage compareImage = new CompareImage(imagePath, 80, appSettings);
@@ -214,6 +214,41 @@ class CompareImageTest {
 		assertEquals(expectedResult, (int) result);
 	}
 
+	@Test
+	final void testCompareImage_EmptyDatabase() {
+		String imagePath = "ImageDatabase\\F1-Cars\\F1-Cars010.jpg";
+		Settings appSettings = new Settings("ImageDatabase\\Results2", "ImageDatabase\\Results", true, false, false);
+		new CompareImage(imagePath, 80, appSettings);
+
+		File[] fileArray = new File("ImageDatabase\\Results").listFiles();
+
+		assertTrue(fileArray.length == 0);
+	}
+
+	@Test
+	final void testCompareImage_Null() {
+		String imagePath = "";
+		Settings appSettings = new Settings("ImageDatabase\\Results2", "ImageDatabase\\Results", true, false, false);
+		new CompareImage(imagePath, 80, appSettings);
+
+		File[] fileArray = new File("ImageDatabase\\Results").listFiles();
+
+		assertTrue(fileArray.length == 0);
+	}
+
+	@Test
+	final void testGetDistance() {
+		String imagePath = null;
+		Settings appSettings = new Settings("", "ImageDatabase\\Results", true, false, false);
+		CompareImage compareImage = new CompareImage(imagePath, 80, appSettings);
+
+		long expectedResult = 17;
+
+		long result = compareImage.getEuclideanDistance(0, 10, 0, 10, 0, 10);
+
+		assertEquals(expectedResult, result);
+	}
+
 	final int[][] addToArray(int[][] array, int val) {
 		for (int x = 0; x < array.length; x++) {
 			for (int y = 0; y < array.length; y++) {
@@ -222,5 +257,4 @@ class CompareImageTest {
 		}
 		return array;
 	}
-
 }

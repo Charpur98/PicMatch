@@ -2,6 +2,7 @@ package PicMatch;
 
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -191,7 +192,7 @@ public class PicImage {
 		bufferedImage = greyImage;
 	}
 
-	protected static int[][] greyScaleArray(BufferedImage img) {
+	protected static int[][] getGreyScaleArray(BufferedImage img) {
 		int[][] gs = null;
 		int height = img.getHeight();
 		int width = img.getWidth();
@@ -211,7 +212,7 @@ public class PicImage {
 		return gs;
 	}
 
-	protected static BufferedImage greyScaleImage(int[][] raw) {
+	protected static BufferedImage getGreyScaleImage(int[][] raw) {
 		BufferedImage img = null;
 		int height = raw.length;
 		int width = raw[0].length;
@@ -227,6 +228,25 @@ public class PicImage {
 		}
 
 		return img;
+	}
+
+	protected void changeImageBrightness(float value) {
+		BufferedImage buffImage = this.bufferedImage;
+		RescaleOp op = new RescaleOp(value, 0, null);
+		this.bufferedImage = op.filter(buffImage, buffImage);
+	}
+
+	protected void rotateImage() {
+		int width = this.bufferedImage.getWidth();
+		int height = this.bufferedImage.getHeight();
+		BufferedImage newImage = new BufferedImage(height, width, this.bufferedImage.getType());
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				newImage.setRGB(height - 1 - j, i, this.bufferedImage.getRGB(i, j));
+			}
+		}
+		this.bufferedImage = newImage;
 	}
 
 }

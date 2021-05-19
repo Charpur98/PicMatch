@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -22,7 +23,8 @@ public class ImageSearchApp {
 
 	private Display display = new Display();
 	private Shell shell = new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
-	private Settings appSettings = new Settings("ImageDatabase\\All", "ImageDatabase\\Results", true, false, false); // Default Settings
+	private Settings appSettings = new Settings("ImageDatabase\\All", "ImageDatabase\\Results", true, false, false); // Default
+																														// Settings
 	private Boolean isSettingsOpen = false;
 
 	private double screenWidth = 1600;
@@ -185,6 +187,10 @@ public class ImageSearchApp {
 				}
 			}
 		} catch (Exception e1) {
+			MessageBox errorBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
+			errorBox.setText("ERROR");
+			errorBox.setMessage("The file selected can not be used in this system.\nPlease select a different one.");
+			errorBox.open();
 			e1.printStackTrace();
 		}
 	}
@@ -195,8 +201,14 @@ public class ImageSearchApp {
 		CompareImage compareImg = new CompareImage(uploadedImage, accuracyLevel, appSettings);
 
 		imageResults = compareImg.getMatches();
-		if (imageResults.length > 0) {
+		if (imageResults.length > 0 && imageResults[0] != null) {
 			displayImages();
+		}
+		else {
+			MessageBox dialog = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
+			dialog.setText("0 Matches Found");
+			dialog.setMessage("PicMatch has not found any similar images.");
+			dialog.open();
 		}
 		ImageData imgData = (new Image(display, uploadedImage)).getImageData().scaledTo(200, 200);
 		UploadedImageLbl.setImage(new Image(display, imgData));
